@@ -3,7 +3,7 @@ define("LOG_FILE", "datetime_log.txt");
 function logDate(DateTime $arrivalDateTime, bool $isLate)
 {
     $formattedDate =  $arrivalDateTime->format("D d. F Y - H:i:s") . ($isLate ? " - meskanie" : "");
-    echo $formattedDate . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL;
+    //echo $formattedDate . PHP_EOL;
     file_put_contents(LOG_FILE, $formattedDate . PHP_EOL, FILE_APPEND);
 }
 
@@ -12,7 +12,7 @@ function getLogs()
     $file =  fopen(LOG_FILE, "r");
     if ($file) {
         while (($line = fgets($file, 4096)) !== false) {
-            echo  $line . PHP_EOL;
+            echo nl2br($line);
         }
     }
     fclose($file);
@@ -31,6 +31,15 @@ function studentArrival()
         die("Prichody v casoch medzi 20:00 a 24:00 nie je mozne zapisat");
     }
     logDate($currentDate, $isLate);
-}
-studentArrival();
-getLogs();
+} ?>
+
+<!DOCTYPE html>
+<html>
+
+<body>
+    <?php
+    studentArrival();
+    getLogs(); ?>
+</body>
+
+</html>

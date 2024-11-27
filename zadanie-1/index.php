@@ -20,19 +20,23 @@ function getLogs()
     fclose($file);
 }
 
+function dateTimeToSeconds(DateTime $dateTime): int
+{
+    $hours = intval($dateTime->format("G"));
+    $minutes = intval($dateTime->format("i"));
+    $seconds = intval($dateTime->format("s"));
+    return $hours * 60 * 60 + $minutes * 60 + $seconds;
+}
+
 function studentArrival()
 {
 
     $currentDate = new DateTime();
-    $hours = intval($currentDate->format("G"));
-    $minutes = intval($currentDate->format("i"));
-    $seconds = intval($currentDate->format("s"));
-    $timeInSeconds = $hours * 60 * 60 + $minutes * 60 + $seconds;
+    $timeInSeconds = dateTimeToSeconds($currentDate);
     if ($timeInSeconds >= 20 * 60 * 60 && $timeInSeconds <= 24 * 60 * 60) {
         die("Prichody v casoch medzi 20:00 a 24:00 nie je mozne zapisat");
     }
     $isLate = $timeInSeconds > 8 * 60 * 60;
-
     logDate($currentDate, $isLate);
 }
 ?>

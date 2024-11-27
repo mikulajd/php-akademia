@@ -9,12 +9,13 @@ function logDate(DateTime $arrivalDateTime, bool $isLate)
 
 function getLogs()
 {
-    echo "Vsetky prichody: <br>";
     $file =  fopen(LOG_FILE, "r");
-    if ($file) {
-        while (($line = fgets($file, 4096)) !== false) {
-            echo  $line . "<br>";
-        }
+    if (!$file) {
+        die("Nie su zaevidovane ziadne prichody");
+    };
+    echo "Vsetky prichody: <br>";
+    while (($line = fgets($file, 4096)) !== false) {
+        echo  $line . "<br>";
     }
     fclose($file);
 }

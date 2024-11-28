@@ -7,7 +7,7 @@ class Arrivals
     {
         $arrivals = Helpers::getArrayFromJsonFile(ARRIVALS_FILE);
         $currentDateTime = new DateTime();
-        $timeInSeconds = Helpers::dateTimeToSeconds($currentDateTime);
+        $timeInSeconds = $this->dateTimeToSeconds($currentDateTime);
         if ($timeInSeconds >= 20 * 60 * 60 && $timeInSeconds <= 24 * 60 * 60) {
             return  "<p><strong> Prichody v casoch medzi 20:00 a 24:00 nie je mozne zapisat </strong></p>";
         }
@@ -25,7 +25,7 @@ class Arrivals
                 $timeString = $arrival["dateTime"];
                 $time = DateTime::createFromFormat("D d. F Y - H:i:s", $timeString);
                 if (!$time) return $arrival;
-                $timeInSeconds = Helpers::dateTimeToSeconds($time);
+                $timeInSeconds = $this->dateTimeToSeconds($time);
                 $arrival['note'] = $this->isLate($timeInSeconds) ? "Meškanie" : "";
                 return  $arrival;
             },
@@ -43,5 +43,12 @@ class Arrivals
     private function isLate(int $timeInSeconds): bool
     {
         return $timeInSeconds > 8 * 60 * 60;
+    }
+    private  function dateTimeToSeconds(DateTime $dateTime): int
+    {
+        $hours = intval($dateTime->format("G"));
+        $minutes = intval($dateTime->format("i"));
+        $seconds = intval($dateTime->format("s"));
+        return $hours * 60 * 60 + $minutes * 60 + $seconds;
     }
 }
